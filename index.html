@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoGuard QR Scanner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="background"></div>
+
+    <div class="card-container">
+        <header class="card-header">
+            <h1 class="app-title">GeoGuard</h1>
+            <p class="subtitle">Secure Batch Scanner</p>
+        </header>
+
+        <main class="card-body">
+            <div class="input-group">
+                <label for="punch-id" class="sr-only">Punch ID</label>
+                <input type="text" id="punch-id" placeholder="Enter Punch ID" autocomplete="off">
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-info">
+                    <span class="progress-label">Batch Progress</span>
+                    <span id="progress-text">0/20</span>
+                </div>
+                <div class="progress-track">
+                    <div id="progress-fill" class="progress-fill" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div id="reader" class="qr-reader-container"></div> <!-- QR Scanner will render here -->
+            <div id="scan-result" class="scan-result hidden">Scanning...</div>
+
+            <div class="action-buttons">
+                <button id="start-btn" class="btn btn-primary">
+                    <span class="icon">📷</span> Start QR Scanner
+                </button>
+                <button id="reset-btn" class="btn btn-outline">
+                    Reset Session
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
