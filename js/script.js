@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Configuration
-    const API_ENDPOINT = 'https://a4c8798a339e.ngrok-free.app -> http://localhost:5678';
+    // REPLACE with your actual N8N Webhook URL
+    const API_ENDPOINT = 'https://a4c8798a339e.ngrok-free.app/webhook/qr-scan';
+
     const MAX_BATCH_SIZE = 20;
 
     // State
@@ -28,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         progressText.textContent = `${currentBatchCount}/${MAX_BATCH_SIZE}`;
         const percentage = (currentBatchCount / MAX_BATCH_SIZE) * 100;
         progressFill.style.width = `${percentage}%`;
-        
+
         // Visual feedback when full
         if (currentBatchCount >= MAX_BATCH_SIZE) {
             progressFill.style.background = 'linear-gradient(90deg, #00b09b, #96c93d)'; // Green gradient for success
@@ -46,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Prevent rapid duplicate scans (simple debounce could be added here, 
         // but library handles some of it. We'll add a visual pause)
-        
+
         // Show scanning feedback
         scanResultEl.textContent = `Scanned: ${decodedText}`;
         scanResultEl.classList.remove('hidden');
@@ -54,15 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Send to backend
         try {
             await sendDataToWebhook(decodedText);
-            
+
             // Increment progress
             currentBatchCount++;
             updateProgressDisplay();
-            
+
             // Optional: Pause scanning briefly for user to acknowledge
             // html5QrcodeScanner.pause(); 
             // setTimeout(() => html5QrcodeScanner.resume(), 1000);
-            
+
         } catch (error) {
             console.error('Scan Error:', error);
             scanResultEl.textContent = 'Error sending data';
@@ -99,15 +101,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!html5QrcodeScanner) {
             // Using Html5Qrcode class for more control or Html5QrcodeScanner for UI
             // Using Html5Qrcode for custom UI integration
-             html5QrcodeScanner = new Html5Qrcode("reader");
+            html5QrcodeScanner = new Html5Qrcode("reader");
         }
 
         const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-        
+
         html5QrcodeScanner.start(
-            { facingMode: "environment" }, 
-            config, 
-            onScanSuccess, 
+            { facingMode: "environment" },
+            config,
+            onScanSuccess,
             onScanFailure
         ).catch(err => {
             console.error("Error starting scanner", err);
@@ -159,8 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (!response.ok) {
-           // throw new Error(`Server responded with ${response.status}`);
-           console.warn("Server response not OK (might be CORS or actual error):", response.status);
+            // throw new Error(`Server responded with ${response.status}`);
+            const errorText = await response.text();
+            console.warn("Server response not OK:", response.status, errorText);
+            throw new Error(`Server responded with ${response.status}: ${errorText}`);
         }
     }
 });
