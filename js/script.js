@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Configuration
-    const API_ENDPOINT = 'http://localhost:5678/webhook-test/qr-scan';
+    const API_ENDPOINT = 'https://a4c8798a339e.ngrok-free.app -> http://localhost:5678';
     const MAX_BATCH_SIZE = 20;
 
     // State
